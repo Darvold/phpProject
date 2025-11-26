@@ -2,10 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
-Route::get('/loginUSer', 'LoginAndRegistrController@loginUser')
+Route::get('/', 'registAndloginUserController@loginUser')
     ->name('login.index');
-Route::get('/registr', 'LoginAndRegistrController@registrUser')
+Route::get('/registr', 'registAndloginUserController@registrationUser')
     ->name('registr.index');

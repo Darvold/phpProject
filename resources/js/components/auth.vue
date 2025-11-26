@@ -25,7 +25,7 @@
                     </div>
                     <button>Log in</button>
                     <div class="register">
-                        <p>Don't have a account ? <a href="#">Register</a></p>
+                        <p>Don't have a account ? <a href="{{route('regist.index')}}">Register</a></p>
                     </div>
                 </form>
             </div>

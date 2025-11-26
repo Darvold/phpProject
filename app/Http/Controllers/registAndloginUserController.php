@@ -7,8 +7,11 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Jenssegers\Date\Date;
 
-class registAndloginUser extends Controller
+class registAndloginUserController extends Controller
 {
+    protected function loginUser(Request $request) {
+        return view('welcome');
+    }
     protected function registrationUser(Request $request) {
         try {
             $data = request()->validate([
