@@ -1,38 +1,10 @@
-
-<template>
-    <section>
-        <div class="form-box">
-            <div class="form-value">
-                <form action="">
-                    <h2>Login</h2>
-                    <div class="inputbox">
-                        <ion-icon name="mail-outline"></ion-icon>
-                        <input type="email" required>
-                        <label for="">Email</label>
-                    </div>
-                    <div class="inputbox">
-                        <ion-icon name="lock-closed-outline"></ion-icon>
-                        <input type="password" required>
-                        <label for="">Password</label>
-                    </div>
-                    <div class="forget">
-                        <label>
-                            <input type="checkbox"> Remember me
-                        </label>
-                        <label>
-                            <a href="#">Forgot password?</a>
-                        </label>
-                    </div>
-                    <button>Log in</button>
-                    <div class="register">
-                        <p>Don't have a account ? <a href="{{route('regist.index')}}">Register</a></p>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </section>
-</template>
 <script setup>
+
+const element = document.getElementById('auth');
+const registerUrl = element.getAttribute('register');
+// Удаляем атрибут после получения значения
+element.removeAttribute('register');
+
 const cards = document.querySelectorAll(".card");
 
 /* View Controller
@@ -67,6 +39,32 @@ function view_change(next) {
 }
 
 </script>
+<template>
+    <section>
+        <div class="form-box">
+            <div class="form-value">
+                <form action="">
+                    <h2>Авторизация</h2>
+                    <div class="inputbox">
+                        <ion-icon name="mail-outline"></ion-icon>
+                        <input type="email" required>
+                        <label for="">Почта</label>
+                    </div>
+                    <div class="inputbox">
+                        <ion-icon name="lock-closed-outline"></ion-icon>
+                        <input type="password" required>
+                        <label for="">Пароль</label>
+                    </div>
+                    <button>Log in</button>
+                    <div class="register">
+                        <p>У вас нет аккаунта? <a :href="registerUrl">Создать</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</template>
+
 
 <style scoped>
 

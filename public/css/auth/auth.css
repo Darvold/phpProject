@@ -29,7 +29,7 @@ section {
 .form-box {
     position: relative;
     width: 400px;
-    height: 450px;
+    height: max;
     background: transparent;
     border: 2px solid rgba(255, 255, 255, 0.5);
     border-radius: 20px;
@@ -40,6 +40,7 @@ section {
 }
 
 h2 {
+    margin: 10px;
     font-size: 2em;
     color: #fff;
     text-align: center;
@@ -130,7 +131,10 @@ button {
     font-size: 1em;
     font-weight: 600;
 }
-
+button:hover {
+    background: #BFF;
+    transition: .2s;
+}
 .register {
     font-size: 0.9em;
     color: #fff;
@@ -146,4 +150,83 @@ button {
 
 .register p a:hover {
     text-decoration: underline;
+}
+input[name='fio']::placeholder,
+input[name='email']::placeholder,
+input[name='password_confirmation']::placeholder,
+input[class='phone']::placeholder {
+    color: transparent;
+    transition: color 0.3s ease;
+}
+
+input[name='fio']:focus::placeholder,
+input[name='email']:focus::placeholder,
+input[name='password_confirmation']:focus::placeholder,
+input[class='phone']:focus::placeholder {
+    color: #999;
+}
+
+.msg {
+    padding: 4px;
+    border: 2px solid red;
+    border-radius: 10px;
+    position: relative;
+    width: 370px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 24px;
+    font-weight: bold;
+}
+.msg_green {
+    padding: 4px;
+    border: 2px solid #009c27;
+    border-radius: 10px;
+    position: relative;
+    max-width: 390px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 24px;
+    font-weight: bold;
+}
+.success {
+    box-shadow: 0 5px 5px 5px rgba(89, 172, 67, 0.8);
+}
+.error {
+    box-shadow: 0 5px 5px 5px rgba(211, 43, 48, 0.8);
+}
+.info {
+    box-shadow: 0 5px 5px 5px rgba(31, 45, 223, 0.8);
+}
+.form-msg {
+    position: relative;
+    top: 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 24px;
+    font-weight: bold;
+}
+.notification {
+    font-family: Montserrat Alternates;
+    border-radius: 4px;
+    display: flex;
+    margin-top: 10px;
+    justify-content: center;
+    position: fixed;
+    width: 300px;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 1);
+    color: black;
+    z-index: 1000;
+    text-align: center;
+    font-size: 25px;
+}
+.notification-content {
+    width: 100%;
+    justify-content: center;
+    position: absolute;
+    display: flex;
 }

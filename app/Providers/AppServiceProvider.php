@@ -2,48 +2,25 @@
 
 namespace App\Providers;
 
-use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\ServiceProvider;
+use Jenssegers\Date\Date;
+use Illuminate\Support\Facades\View;
 
 class AppServiceProvider extends ServiceProvider
 {
     /**
-     * The controller namespace for the application.
-     *
-     * When present, controller route declarations will automatically be prefixed with this namespace.
-     *
-     * @var string|null
+     * Register any application services.
      */
-    public const HOME = '/home';
-    protected $namespace = 'App\\Http\\Controllers';
+    public function register(): void
+    {
+        $this->app->register(RouteServiceProvider::class);
+    }
+
     /**
-     * Define your route model bindings, pattern filters, and other route configuration.
+     * Bootstrap any application services.
      */
     public function boot(): void
     {
-        RateLimiter::for('api', function (Request $request) {
-            return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
-        });
 
-        $this->routes(function () {
-            Route::middleware('api')
-                ->namespace($this->namespace)
-                ->prefix('api')
-                ->group(base_path('routes/api.php'));
-
-            Route::middleware('web')
-                ->namespace($this->namespace)
-                ->group(function () {
-                    require base_path('routes/web.php');
-/*                    require base_path('routes/user.php');*/
-                });
-
-           /* Route::middleware('web')
-                ->namespace($this->namespace)
-                ->group(base_path('routes/admin.php'));*/
-        });
     }
 }

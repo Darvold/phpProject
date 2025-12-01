@@ -1,0 +1,24 @@
+html {
+	background-color: black;
+	color: white;
+}
+.body {
+    width: 100%;
+    height: 100%; /* Полная высота окна */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 1vh;
+	z-index: 2;
+    position: relative;
+}
+
+.mainBlock {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    border-radius: 10px;
+    height: 90vh;
+    border: 1px solid white;
+    box-shadow: 0 15px 15px 10px hsla(0, 0%, 100%, 0.4);
+}

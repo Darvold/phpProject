@@ -9,12 +9,35 @@
 </head>
 <body>
 <script src="{{ asset('js/NumberMask/imask.js') }}"></script>
+<div class="form-msg">
+    @if (session('success'))
+        <div class="notification-content">
+            <div class="notification"> {{ session('success') }}</div>
+        </div>
+
+    @elseif (session('error'))
+        <div class="notification-content">
+            <div class="notification"> {{ session('error') }}</div>
+        </div>
+
+    @endif
+</div>
 <section>
     <div class="form-box">
         <div class="form-value">
-            <form method="POST" action="{{route('login.store')}}">
+            <form method="POST" action="{{route('regist.store')}}">
                 @csrf
-                <h2>Авторизация</h2>
+                <h2>Регистрация</h2>
+                <div class="inputbox">
+                    <ion-icon name="mail-outline"></ion-icon>
+                    <input type="text" name="fio" placeholder="Иванов Иван Иванович" value="{{ old('fio') }}" required>
+                    <label for="">ФИО</label>
+                </div>
+                <div class="inputbox">
+                    <ion-icon name="mail-outline"></ion-icon>
+                    <input type="email" name="email" placeholder="PiGarage.2024@mail.ru" value="{{ old('email') }}" required>
+                    <label for="">Почта</label>
+                </div>
                 <div class="inputbox">
                     <ion-icon name="mail-outline"></ion-icon>
                     <input type="text" data-mask="phone" id="phone" class="phone" value="{{ old('phone') }}" required placeholder="+7">
@@ -26,14 +49,21 @@
                     <input type="password" name="password" placeholder="" required>
                     <label for="">Пароль</label>
                 </div>
-                <button type="submit">Войти</button>
+                <div class="inputbox">
+                    <ion-icon name="lock-closed-outline"></ion-icon>
+                    <input type="password" name="password_confirmation" placeholder="Менее 6 символов (макс. 255)" required>
+                    <label for="">Подтверждение пароля</label>
+                </div>
+                <button type="submit">Создать аккаунт</button>
                 <div class="register">
-                    <p>У вас нет аккаунта? <a href="{{ route('regist.index') }}">Войти</a></p>
+                    <p>У вас уже есть аккаунт? <a href="{{ route('login.index') }}">Войти</a></p>
                 </div>
             </form>
         </div>
     </div>
 </section>
+
+@vite(['resources/css/app.css', 'resources/js/app.js'])
 <script>
     document.querySelector('button[type="submit"]').addEventListener('click', function(e) {
         e.preventDefault();
@@ -99,6 +129,5 @@
         IMask(inputElement, maskOptions) // запускаем плагин с переданными параметрами
     })
 </script>
-@vite(['resources/css/app.css', 'resources/js/app.js'])
 </body>
 </html>

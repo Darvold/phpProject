@@ -4,9 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class Users extends Model
+class Users extends Authenticatable
 {
     use HasFactory;
     use Notifiable;
@@ -15,6 +16,6 @@ class Users extends Model
     protected $guarded = [];
     protected $primaryKey = 'id';
     protected $fillable = [
-        'fio', 'phone', 'email', 'password', 'region', 'data_reg', 'id_al',
+        'fio', 'phone', 'email', 'password', 'data_reg'
     ];
 }

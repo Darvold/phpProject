@@ -14,12 +14,10 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id('id');
             $table->string('fio');
-            $table->string('phone');
+            $table->string('phone')->unique();
             $table->string('email')->unique(); // Уникальный Email
             $table->string('password');
-            $table->string('region');
             $table->datetime('data_reg')->useCurrent(); // Используйте текущее время
-            $table->integer('id_al');
             $table->rememberToken();
         });
     }
