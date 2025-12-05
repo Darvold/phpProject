@@ -63,17 +63,11 @@ class registAndloginUserController extends Controller
             // Если в поле FIO обнаружены цифры или знаки, добавляем сообщение об ошибке и перенаправляем обратно
             return redirect()->back()->with('error', 'ФИО не должно содержать цифры и специальные символы!')->withInput();
         }
-        $emailExists = Users::where('email', $data['email'])->exists();
-        $phoneExists = Users::where('phone', $data['phone'])->exists();
-        if ($emailExists) {
+        if (Users::where('email', $data['email'])->exists()) {
             return redirect()->back()->with('error', 'Данная почта уже зарегистрирована')->withInput();
         }
-        if ($phoneExists) {
-            return redirect()->back()->with('error', 'Данный телефон уже зарегистрирован')->withInput();
-        }
-        // Проверяем, существует ли адрес электронной почты в базе данных
         if (Users::where('phone', $data['phone'])->exists()) {
-            return redirect()->back()->with('error', 'Что-то пошло не так, повторите попытку')->withInput();
+            return redirect()->back()->with('error', 'Данный телефон уже зарегистрирован')->withInput();
         }
         if (strlen($data['password']) < 6) {
             return redirect()->back()->with('error', 'Пароль должен быть минимум из 6 символов!')->withInput();

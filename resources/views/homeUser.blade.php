@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>phpProject</title>
+    <link rel="stylesheet" href="{{asset('css/main/msg.css')}}">
+    <link rel="stylesheet" href="{{asset('css/main/mainCSS.css')}}">
     <link rel="stylesheet" href="{{asset('css/main/head.css')}}">
     <link rel="stylesheet" href="{{asset('css/main/homeUser.css')}}">
 </head>
@@ -12,15 +14,17 @@
     <script src="{{ asset('js/NumberMask/imask.js') }}"></script>
     <div class="form-msg">
         @if (session('success'))
-        <div class="notification-content">
-            <div class="notification"> {{ session('success') }}</div>
-        </div>
-
+            <div class="notification-content">
+                <div class="notification success"> {{ session('success') }}</div>
+            </div>
         @elseif (session('error'))
-        <div class="notification-content">
-            <div class="notification"> {{ session('error') }}</div>
-        </div>
-
+            <div class="notification-content">
+                <div class="notification error"> {{ session('error') }}</div>
+            </div>
+        @elseif (session('info'))
+            <div class="notification-content">
+                <div class="notification info"> {{ session('info') }}</div>
+            </div>
         @endif
     </div>
     <div class="allBody">
@@ -57,7 +61,47 @@
         </div>
         <div class="body">
             <div class="mainBlock">
-                
+                <div class="leftColumn">
+                    <div class="clickBlock">
+                        <a href="">Профиль</a>
+                    </div>
+                    <div class="clickBlock">
+                        <a href="">CRUD-операции</a>
+                    </div>
+                </div>
+                <div class="rightBlock">
+                    <div class="user-avatar-right-block">
+                        <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="#667eea">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </div>
+                    <div class="rightUserInformation">
+                        <form method="POST" action="{{route('home.put')}}" class="profile-form">
+                            @csrf
+                            @method('PUT')
+                            <div class="form-group">
+                                <label for="fio">ФИО</label>
+                                <input type="text" id="fio" name="fio" value="{{ auth()->user()->fio }}"
+                                class="form-input" placeholder="Введите ФИО">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" value="{{ auth()->user()->email }}"
+                                class="form-input" placeholder="example@mail.ru">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="phone">Телефон</label>
+                                <input type="tel" id="phone" value="{{ auth()->user()->phone }}" class="form-input" placeholder="+7 (XXX) XXX-XX-XX">
+                                <input type="hidden" name="phone" value="" required>
+                            </div>
+
+                            <button type="submit" class="submit-btn">Сохранить изменения</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -65,13 +109,13 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script>
-       /* document.querySelector('button[type="submit"]').addEventListener('click', function(e) {
+        document.querySelector('button[class="submit-btn"]').addEventListener('click', function(e) {
             e.preventDefault();
             const phoneInput = document.querySelector('#phone');
             const phoneHidden = document.querySelector('input[name="phone"]');
             phoneHidden.value = phoneInput.value.replace(/\D/g, '');
             this.closest('form').submit();
-        });*/
+        });
 
     </script>
     <script>
