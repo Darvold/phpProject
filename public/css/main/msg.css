@@ -1,65 +1,62 @@
-.msg {
-	padding: 4px;
-	border: 2px solid red;
-	border-radius: 10px;
-	position: relative;
-	width: 370px;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	font-size: 24px;
-	font-weight: bold;
-}
-.msg_green {
-	padding: 4px;
-	border: 2px solid #009c27;
-	border-radius: 10px;
-	position: relative;
-	max-width: 390px;
-	width: 100%;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	font-size: 24px;
-	font-weight: bold;
-}
 .form-msg {
-	position: relative;
-	top: 180px;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	font-size: 24px;
-	font-weight: bold;
-}
-.notification {
-	font-family: Montserrat Alternates;
-	border-radius: 4px;
-    display: flex;
-    margin-top: 10px;
-    justify-content: center;
     position: fixed;
-    width: 300px;
-    padding: 10px;
-    background-color: rgba(255, 255, 255, 1);
-    color: black;
-    z-index: 1000;
-    text-align: center;
-    font-size: 25px;
-}
-.success {
-	box-shadow: 0 5px 5px 5px rgba(89, 172, 67, 0.8);
-}
-.error {
-	box-shadow: 0 5px 5px 5px rgba(211, 43, 48, 0.8);
-}
-.info {
-	box-shadow: 0 5px 5px 5px rgba(31, 45, 223, 0.8);
-}
-.notification-content {
+    top: 0;
+    left: 0;
     width: 100%;
-    justify-content: center;
-    position: absolute;
+    z-index: 9999;
     display: flex;
+    justify-content: center;
+    pointer-events: none;
 }
-/*  box-shadow: 0 5px 5px 5px rgba(0, 0, 0, 0.6);*/
+
+.notification {
+    position: relative;
+    top: 20px;
+    padding: 15px 25px;
+    border-radius: 8px;
+    color: white;
+    font-weight: 500;
+    font-size: 16px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    animation: 
+        slideIn 0.5s ease forwards,
+        slideOut 0.5s ease 4s forwards;
+    pointer-events: auto;
+    min-width: 300px;
+    text-align: center;
+}
+
+/* Можно добавить в HTML классы success/error */
+.success {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+}
+
+.error {
+    background: linear-gradient(135deg, #f44336, #d32f2f);
+}
+
+.info {
+    background: linear-gradient(135deg, #3853C6, #3C63C8);
+}
+@keyframes slideIn {
+    from {
+        transform: translateY(-100px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(-100px);
+        opacity: 0;
+        visibility: hidden;
+    }
+}

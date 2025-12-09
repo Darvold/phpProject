@@ -9,6 +9,6 @@ class UserController extends Controller
     public function logout() {
         auth()->guard('web')->logout(); // Выход текущего пользователя
 
-        return redirect()->route('login.index');
+        return redirect()->route('login.index')->with('info', 'Вы вышли из аккаунта');
     }
 }

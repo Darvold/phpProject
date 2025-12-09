@@ -1,93 +1,79 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>phpProject</title>
-    <link rel="stylesheet" href="{{asset('css/auth/auth.css')}}">
-</head>
-<body>
-<script src="{{ asset('js/NumberMask/imask.js') }}"></script>
+@extends('layouts.app', ['authUsers' => ['auth.css']])
+@section('content')
 <section>
     <div class="form-box">
         <div class="form-value">
-            <form method="POST" action="{{route('login.store')}}">
+            <form method="POST" action="{{route('login.store')}}" id="loginForm">
                 @csrf
                 <h2>Авторизация</h2>
-                <div class="inputbox">
-                    <ion-icon name="mail-outline"></ion-icon>
-                    <input type="text" data-mask="phone" id="phone" class="phone" value="{{ old('phone') }}" required placeholder="+7">
-                    <input type="hidden" name="phone" value="" required>
+                <div class="inputbox {{ $errors->has('phone') ? 'error' : '' }}">
+                    <ion-icon name="call-outline"></ion-icon>
+                    <input type="text" data-mask="phone" id="phone" class="phone-input phone" value="{{ old('phone') }}" required placeholder="">
                     <label for="">Телефон</label>
                 </div>
-                <div class="inputbox">
+
+                <div class="inputbox {{ $errors->has('password') ? 'error' : '' }}">
                     <ion-icon name="lock-closed-outline"></ion-icon>
                     <input type="password" name="password" placeholder="" required>
                     <label for="">Пароль</label>
                 </div>
-                <button type="submit">Войти</button>
+
+                <button type="submit" id="submitBtn">Войти</button>
+
                 <div class="register">
-                    <p>У вас нет аккаунта? <a href="{{ route('regist.index') }}">Войти</a></p>
+                    <p>У вас нет аккаунта? <a href="{{ route('regist.index') }}">Зарегистрироваться</a></p>
                 </div>
             </form>
         </div>
     </div>
 </section>
 <script>
-    document.querySelector('button[type="submit"]').addEventListener('click', function(e) {
-        e.preventDefault();
-        const phoneInput = document.querySelector('#phone');
-        const phoneHidden = document.querySelector('input[name="phone"]');
-        phoneHidden.value = phoneInput.value.replace(/\D/g, '');
-        this.closest('form').submit();
-    });
-    const cards = document.querySelectorAll(".card");
-
-    /* View Controller
-    -----------------------------------------*/
-    const btns = document.querySelectorAll(".js-btn");
-    btns.forEach((btn) => {
-        btn.addEventListener("click", on_btn_click, true);
-        btn.addEventListener("touch", on_btn_click, true);
-    });
-
-    function on_btn_click(e) {
-        const nextID = e.currentTarget.getAttribute("data-target");
-        const next = document.getElementById(nextID);
-        if (!next) return;
-        bg_change(nextID);
-        view_change(next);
-        return false;
-    }
-
-    /* Add class to the body */
-    function bg_change(next) {
-        document.body.className = "";
-        document.body.classList.add("is-" + next);
-    }
-
-    /* Add class to a card */
-    function view_change(next) {
-        cards.forEach((card) => {
-            card.classList.remove("is-show");
-        });
-        next.classList.add("is-show");
-    }
-
-</script>
-<script>
     $(document).ready(function() {
-        $(".notification").css('top', '-100px'); // Скрываем уведомление за пределами видимой области
-        setTimeout(function() {
-            $(".notification").animate({top: 20}, 500, function() {
-                setTimeout(function() {
-                    $(".notification").animate({top: '-100px'}, 500, function() {
-                        $(this).remove();
-                    });
-                }, 6000); // 3 секунды
-            });
-        }, 0); // Задержка перед появлением
+    // Обработка отправки формы
+        $('#loginForm').on('submit', function(e) {
+            e.preventDefault();
+
+            const $phoneInput = $('#phone');
+            const $form = $(this);
+
+        // Очищаем номер от всех символов кроме цифр
+            let phoneValue = $phoneInput.val().replace(/\D/g, '');
+
+        // Проверяем длину номера
+            if (phoneValue.length === 10) {
+            // Если пользователь ввел 10 цифр без +7
+                phoneValue = '7' + phoneValue;
+            }
+
+        // Проверяем валидность
+            if (phoneValue.length !== 11 || !phoneValue.startsWith('7')) {
+                alert('Пожалуйста, введите корректный номер телефона в формате +7 XXX XXX-XX-XX');
+                $phoneInput.focus();
+                return false;
+            }
+
+        // Формируем номер в нужном формате
+            const formattedPhone = '7' + phoneValue.substring(1);
+
+        // Создаем скрытое поле или обновляем существующее
+            let $hiddenPhone = $('input[name="phone"][type="hidden"]', $form);
+
+            if ($hiddenPhone.length === 0) {
+            // Создаем новое скрытое поле
+                $hiddenPhone = $('<input>', {
+                    type: 'hidden',
+                    name: 'phone',
+                    value: formattedPhone
+                });
+                $form.append($hiddenPhone);
+            } else {
+            // Обновляем существующее
+                $hiddenPhone.val(formattedPhone);
+            }
+
+        // Отправляем форму
+            this.submit();
+        });
     });
 </script>
 <script>
@@ -99,6 +85,4 @@
         IMask(inputElement, maskOptions) // запускаем плагин с переданными параметрами
     })
 </script>
-@vite(['resources/css/app.css', 'resources/js/app.js'])
-</body>
-</html>
+@endsection

@@ -1,97 +1,175 @@
 .head {
-	height: 8vh;
-	border-bottom: 1px solid var(--border-color);
-	border-top: 1px solid var(--border-color);
-	width: 100%;
-	display: flex;
-	box-shadow: 0 15px 15px 10px var(--box-shadow-color);
+    background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+    border-radius: 16px;
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     position: relative;
-    z-index: 1;
+    overflow: hidden;
 }
-.nameProject {
-	width: 30%;
-	height: 100%;
-	display: flex;
-	justify-content: center;
 
+.head::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
 }
-.nameProject b {
-	background-color: var(--php-text-background-color);
-	border-radius: 40%;
-}
-.nameProject span {
-	font-size: 45px;
-	display: flex; 
-	align-items: center
-}
-.name {
-	font-family: Comic Sans MS, Comic Sans, cursive;
-}
-.rightHeadBlock {
+
+/* Левая часть с логотипом */
+.head-left {
     display: flex;
     align-items: center;
-    width: 70%;
-    justify-content: right;
-    gap: 20px;
-    padding: 10px;
 }
 
-.user-info {
+.logo {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.logo-text {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    display: flex;
+    align-items: baseline;
+}
+
+.logo-php {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 800;
+}
+
+.logo-project {
+    color: #e2e8f0;
+    margin-left: 5px;
+    font-weight: 700;
+}
+
+.logo-subtitle {
+    font-size: 12px;
+    color: #a0aec0;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+/* Правая часть с пользователем */
+.head-right {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 8px 16px;
-    background: var(--background-color-white);
-    border-radius: 25px;
-    border: 1px solid var(--border-color);
+    gap: 30px;
 }
 
-.user-avatar {
-    width: 50px;
-    height: 50px;
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 8px 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.user-profile:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(102, 126, 234, 0.3);
+}
+
+.avatar-wrapper {
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--background-color-black);
-    border-radius: 50%;
-    border: 4px solid var(--border-color);
-}
-.user-name {
-    font-weight: 500;
-    color: #333;
-    font-size: 20px;
+    border: 2px solid rgba(102, 126, 234, 0.3);
 }
 
-.exit form {
+.user-details {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.user-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #f7fafc;
+    white-space: nowrap;
+}
+
+.user-role {
+    font-size: 12px;
+    color: #a0aec0;
+    background: rgba(160, 174, 192, 0.1);
+    padding: 2px 8px;
+    border-radius: 10px;
+    display: inline-block;
+}
+
+/* Кнопка выхода */
+.logout-form {
     margin: 0;
 }
 
 .logout-btn {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 10px 20px;
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    color: var(--color-text);
+    gap: 10px;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.9) 0%, rgba(220, 38, 38, 0.9) 100%);
+    color: white;
     border: none;
-    border-radius: 25px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
     cursor: pointer;
-    font-weight: 500;
-    font-size: 22px;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 10px rgba(245, 87, 108, 0.2);
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.logout-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
 }
 
 .logout-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(245, 87, 108, 0.3);
+    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.3);
+}
+
+.logout-btn:hover::before {
+    left: 100%;
 }
 
 .logout-btn:active {
     transform: translateY(0);
 }
 
-/* Иконка выхода */
 .logout-btn svg {
-    stroke-width: 3;
+    transition: transform 0.3s ease;
+}
+
+.logout-btn:hover svg {
+    transform: translateX(3px);
 }

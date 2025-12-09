@@ -1,232 +1,297 @@
-
-   * {
-       margin: 0;
-       padding: 0;
-       font-family: "Poppins", sans-serif;
-   }
-
-section {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    width: 100%;
-    background: black;
-    background-position: center;
-    background-size: cover;
-    animation: backgroundChange 5s infinite alternate;
-}
-
-@keyframes backgroundChange {
-    0% {
-        background-color: black;
+       * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
     }
-    100% {
-        background-color: #333; /* чуть более светлый оттенок */
+
+    body {
+        background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
     }
-}
 
-.form-box {
-    position: relative;
-    width: 400px;
-    height: max;
-    background: transparent;
-    border: 2px solid rgba(255, 255, 255, 0.5);
-    border-radius: 20px;
-    backdrop-filter: blur(15px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+    section {
+        width: 100%;
+        max-width: 450px;
+        animation: fadeIn 0.8s ease;
+    }
 
-h2 {
-    margin: 10px;
-    font-size: 2em;
-    color: #fff;
-    text-align: center;
-}
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 
-.inputbox {
-    position: relative;
-    margin: 30px 0;
-    width: 310px;
-    border-bottom: 2px solid #fff;
-}
+    .form-box {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 40px;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
 
-.inputbox label {
-    position: absolute;
-    top: 50%;
-    left: 5px;
-    transform: translateY(-50%);
-    color: #fff;
-    font-size: 1em;
-    pointer-events: none;
-    transition: 0.5s;
-}
+    .form-box::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    }
 
-input:focus ~ label {
-    top: -5px;
-}
-input:valid ~ label {
-    top: -5px;
-}
+    .form-value {
+        width: 100%;
+    }
 
-.inputbox input {
-    width: 100%;
-    height: 50px;
-    background: transparent;
-    border: none;
-    outline: none;
-    font-size: 1em;
-    padding: 0 35px 0 5px;
-    color: #fff;
-}
+    h2 {
+        text-align: center;
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 30px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        position: relative;
+    }
 
-.inputbox ion-icon {
-    position: absolute;
-    right: 8px;
-    color: #fff;
-    font-size: 1.2em;
-    top: 20px;
-}
+    h2::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 3px;
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        border-radius: 2px;
+    }
 
-.forget {
-    display: flex;
-    justify-content: space-between;
-    margin: 10px 0 15px;
-    font-size: 0.9em;
-    color: #fff;
-}
+    .inputbox {
+        position: relative;
+        margin-bottom: 30px;
+    }
 
-.forget label:nth-child(2) {
-    order: 1;
-}
+    .inputbox ion-icon {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 20px;
+        color: #718096;
+        transition: all 0.3s ease;
+        z-index: 2;
+    }
 
-.forget label {
-    display: flex;
-    align-items: center;
-}
+    .inputbox input {
+        width: 100%;
+        height: 55px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 0 20px 0 50px;
+        font-size: 16px;
+        color: #f7fafc;
+        transition: all 0.3s ease;
+        position: relative;
+        z-index: 1;
+    }
 
-.forget label input[type="checkbox"] {
-    margin-right: 6px;
-}
+    .inputbox input:focus {
+        outline: none;
+        border-color: #667eea;
+        background: rgba(102, 126, 234, 0.05);
+        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    }
 
-.forget label a {
-    color: #fff;
-    text-decoration: none;
-}
+    .inputbox input:focus + label,
+    .inputbox input:not(:placeholder-shown) + label {
+        top: -15px;
+        left: 15px;
+        font-size: 12px;
+        color: #667eea;
+        background: rgba(26, 32, 44, 0.9);
+        padding: 2px 8px;
+        border-radius: 10px;
+        z-index: 3;
+    }
 
-.forget label a:hover {
-    text-decoration: underline;
-}
+    .inputbox input:focus ~ ion-icon {
+        color: #667eea;
+        transform: translateY(-50%) scale(1.1);
+    }
 
-button {
-    width: 100%;
-    height: 40px;
-    border-radius: 40px;
-    background: #fff;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    font-size: 1em;
-    font-weight: 600;
-}
-button:hover {
-    background: #BFF;
-    transition: .2s;
-}
-.register {
-    font-size: 0.9em;
-    color: #fff;
-    text-align: center;
-    margin: 25px 0 10px;
-}
+    .inputbox label {
+        position: absolute;
+        top: 50%;
+        left: 40px;
+        transform: translateY(-50%);
+        font-size: 16px;
+        color: #a0aec0;
+        pointer-events: none;
+        transition: all 0.3s ease;
+        padding: 0 5px;
+        z-index: 2;
+    }
 
-.register p a {
-    text-decoration: none;
-    color: #fff;
-    font-weight: 600;
-}
+    /* Стиль для поля телефона */
+    .phone-input-container {
+        position: relative;
+    }
 
-.register p a:hover {
-    text-decoration: underline;
-}
-input[name='fio']::placeholder,
-input[name='email']::placeholder,
-input[name='password_confirmation']::placeholder,
-input[class='phone']::placeholder {
-    color: transparent;
-    transition: color 0.3s ease;
-}
+    .phone-prefix {
+        position: absolute;
+        left: 50px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #718096;
+        font-weight: 500;
+        z-index: 2;
+    }
 
-input[name='fio']:focus::placeholder,
-input[name='email']:focus::placeholder,
-input[name='password_confirmation']:focus::placeholder,
-input[class='phone']:focus::placeholder {
-    color: #999;
-}
+    .phone-input {
+        padding-left: 65px !important;
+    }
 
-.msg {
-    padding: 4px;
-    border: 2px solid red;
-    border-radius: 10px;
-    position: relative;
-    width: 370px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-size: 24px;
-    font-weight: bold;
-}
-.msg_green {
-    padding: 4px;
-    border: 2px solid #009c27;
-    border-radius: 10px;
-    position: relative;
-    max-width: 390px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-size: 24px;
-    font-weight: bold;
-}
-.success {
-    box-shadow: 0 5px 5px 5px rgba(89, 172, 67, 0.8);
-}
-.error {
-    box-shadow: 0 5px 5px 5px rgba(211, 43, 48, 0.8);
-}
-.info {
-    box-shadow: 0 5px 5px 5px rgba(31, 45, 223, 0.8);
-}
-.form-msg {
-    position: relative;
-    top: 180px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-size: 24px;
-    font-weight: bold;
-}
-.notification {
-    font-family: Montserrat Alternates;
-    border-radius: 4px;
-    display: flex;
-    margin-top: 10px;
-    justify-content: center;
-    position: fixed;
-    width: 300px;
-    padding: 10px;
-    background-color: rgba(255, 255, 255, 1);
-    color: black;
-    z-index: 1000;
-    text-align: center;
-    font-size: 25px;
-}
-.notification-content {
-    width: 100%;
-    justify-content: center;
-    position: absolute;
-    display: flex;
-}
+    button[type="submit"] {
+        width: 100%;
+        height: 55px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 12px;
+        color: white;
+        font-size: 18px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 10px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    button[type="submit"]:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+    }
+
+    button[type="submit"]:active {
+        transform: translateY(-1px);
+    }
+
+    button[type="submit"]::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.7s ease;
+    }
+
+    button[type="submit"]:hover::before {
+        left: 100%;
+    }
+
+    .register {
+        text-align: center;
+        margin-top: 25px;
+        padding-top: 25px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .register p {
+        color: #a0aec0;
+        font-size: 15px;
+    }
+
+    .register a {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+    .register a:hover {
+        color: #764ba2;
+    }
+
+    .register a::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: #667eea;
+        transition: width 0.3s ease;
+    }
+
+    .register a:hover::after {
+        width: 100%;
+    }
+
+    /* Стили для ошибок валидации */
+    .error-message {
+        color: #f56565;
+        font-size: 13px;
+        margin-top: 5px;
+        padding-left: 5px;
+        animation: shake 0.3s ease;
+    }
+
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+    }
+
+    .inputbox.error input {
+        border-color: #f56565;
+        box-shadow: 0 0 0 4px rgba(245, 101, 101, 0.1);
+    }
+
+    .inputbox.error ion-icon {
+        color: #f56565;
+    }
+
+    .inputbox.error label {
+        color: #f56565;
+    }
+
+    /* Уведомления */
+    .alert {
+        padding: 15px;
+        border-radius: 12px;
+        margin-bottom: 25px;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        animation: slideIn 0.5s ease;
+    }
+
+    @keyframes slideIn {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .alert-success {
+        background: rgba(72, 187, 120, 0.1);
+        border: 1px solid rgba(72, 187, 120, 0.3);
+        color: #48bb78;
+    }
+
+    .alert-error {
+        background: rgba(245, 101, 101, 0.1);
+        border: 1px solid rgba(245, 101, 101, 0.3);
+        color: #f56565;
+    }

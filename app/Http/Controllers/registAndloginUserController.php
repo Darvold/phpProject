@@ -30,7 +30,7 @@ class registAndloginUserController extends Controller
 
         if (password_verify($data['password'], $user->password)) {
             auth()->login($user);
-            return redirect()->route('home.index');
+            return redirect()->route('home.index')->with('success', 'Добро пожаловать!');
         }
 
         return redirect()->back()->with('error', 'Неверный номер или пароль!')->withInput();
