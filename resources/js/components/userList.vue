@@ -34,10 +34,10 @@
                 <div class="table-header">
                     <div class="table-row header-row">
                         <div class="table-cell">ФИО</div>
-                        <div class="table-cell">Email</div>
-                        <div class="table-cell">Роль</div>
-                        <div class="table-cell">Статус</div>
-                        <div class="table-cell">Действия</div>
+                        <div class="table-cell email">Email</div>
+                        <div class="table-cell role">Роль</div>
+                        <div class="table-cell status">Статус</div>
+                        <div class="table-cell action">Действия</div>
                     </div>
                 </div>
 
@@ -73,17 +73,17 @@
                             </div>
 
                             <!-- Email -->
-                            <div class="table-cell">{{ user.email }}</div>
+                            <div class="table-cell email">{{ user.email }}</div>
 
                             <!-- Роль -->
-                            <div class="table-cell">
+                            <div class="table-cell role">
                                 <span :class="['role-badge', getRoleBadgeClass(user.role)]">
                                     {{ getRoleName(user.role) }}
                                 </span>
                             </div>
 
                             <!-- Статус -->
-                            <div class="table-cell">
+                            <div class="table-cell status">
                                 <span
                                     :class="['status-indicator', {
                                         active: user.is_active,
@@ -95,17 +95,19 @@
                             </div>
 
                             <!-- Действия -->
-                            <div class="table-cell">
+                            <div class="table-cell action">
                                 <div class="action-buttons">
                                     <button
                                         class="btn-action edit"
                                         :title="`Редактировать ${user.fio}`"
+                                        :data-id-user="user.id"
                                         @click="editUser(user)">
                                         ✏️
                                     </button>
-                                    <button
+                                    <button v-if="myId !== user.id"
                                         class="btn-action delete"
                                         :title="`Удалить ${user.fio}`"
+                                        :data-id-user="user.id"
                                         @click="deleteUser(user)">
                                         🗑️
                                     </button>
@@ -141,9 +143,9 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-
 // Реактивные данные
 const users = ref([]);
+const myId = ref(null);
 const loading = ref(false);
 const searchLoading = ref(false);
 const currentPage = ref(1);
@@ -165,9 +167,11 @@ onMounted(() => {
             totalPages.value = parseInt(container.dataset.totalPages || '1');
             totalItems.value = parseInt(container.dataset.totalItems || '0');
             perPage.value = parseInt(container.dataset.perPage || '6');
+            myId.value = parseInt(container.dataset.myId || null);
             paginationUrl.value = container.dataset.paginationUrl || window.location.pathname;
 
             console.log('Инициализация данных:', {
+                userId: myId.value,
                 usersCount: users.value?.length || 0,
                 currentPage: currentPage.value,
                 totalPages: totalPages.value,
@@ -383,8 +387,15 @@ const resetSearch = async () => {
 
 // Методы для действий
 const editUser = (user) => {
-    console.log('Редактировать пользователя:', user);
-    // Здесь будет логика редактирования
+    /*console.log('Редактировать пользователя:', user);*/
+
+    // 1. Сохраняем данные в глобальную переменную
+    window.editingUserData = user;
+
+    // 2. Генерируем событие для другого компонента
+    const event = new CustomEvent('user-edit-start', { detail: user });
+    window.dispatchEvent(event);
+
 };
 
 const deleteUser = (user) => {
@@ -455,7 +466,6 @@ window.addEventListener('popstate', () => {
 .inactive-user {
     opacity: 0.7;
 }
-
 /* Пагинация */
 .list-footer {
     margin-top: 20px;

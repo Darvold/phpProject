@@ -16,7 +16,11 @@
         "vite": "^7.0.7"
     },
     "dependencies": {
+        "@vueuse/components": "^14.1.0",
         "vue": "^3.5.25",
-        "vue-router": "^4.6.3"
+        "vue-input-facade": "^2.2.0",
+        "vue-input-mask": "^0.0.11",
+        "vue-router": "^4.6.3",
+        "vue-the-mask": "^0.11.1"
     }
 }

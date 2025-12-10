@@ -52,6 +52,7 @@ Route::middleware([CheckUserAccess::class])->group(function () {
             'per_page' => $users->perPage()
         ]);
     })->name('users.api.get');
+    Route::post('/api/CRUD/users/update', [ControllersNamespace\HomeUserController::class, 'updateUserData'])->name('userUpdate.api.get');
 
     //Выход из профиля
     Route::post('/logout', [ControllersNamespace\UserController::class, 'logout'])->name('logoutUser.store');

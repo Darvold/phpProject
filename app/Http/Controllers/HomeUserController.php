@@ -7,6 +7,8 @@ use App\Models\Session;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class HomeUserController extends Controller
@@ -50,8 +52,8 @@ class HomeUserController extends Controller
 
         // Добавляем поиск по ФИО
         if ($search) {
-            $query->whereRaw('LOWER(fio) LIKE ?', ['%' . strtolower($search) . '%']);
-            // ВЫВОДИМ SQL ЗАПРОС ДО ПАГИНАЦИИ Проверка на SQL запрос
+            $query->where('fio', 'LIKE', '%' . $search . '%');
+            // ВЫВОДИМ SQL ЗАПРОС ДО ПАГИНАЦИИ Проверка на SQL запрос Логи
 /*           $sql = $query->toSql();
             $bindings = $query->getBindings();
 
@@ -100,6 +102,116 @@ class HomeUserController extends Controller
             'perPage' => $perPage,
             'searchQuery' => $search
         ]);
+    }
+// app/Http/Controllers/HomeUserController.php
+    public function updateUserData(Request $request)
+    {
+        try {
+            // Валидация данных
+            $validator = Validator::make($request->all(), [
+                'id' => 'required|integer|exists:users,id',
+                'fio' => ['required',
+                    'string',
+                    'max:255',
+                    function ($attribute, $value, $fail) {
+                        if (preg_match('/[0-9!@#$%^&*()_+|~=`{}\[\]:";\'<>?,.\/]/', $value)) {
+                            // Если в поле FIO обнаружены цифры или знаки, добавляем сообщение об ошибке и перенаправляем обратно
+                            $fail('error', 'ФИО не должно содержать цифры и специальные символы!');
+                        }
+
+                        // Проверка на русские буквы
+                        /*if (!preg_match('/^[а-яА-ЯёЁ\s\-]+$/u', $value)) {
+                            $fail('ФИО должно содержать только русские буквы');
+                        }*/
+                    }
+                ],
+                'email' => [
+                    'required',
+                    'email',
+                    'max:255',
+                ],
+                'phone' => 'required|integer|digits:11',
+                'role' => 'required|integer|in:1,2,3', // 1-пользователь, 2-админ, 3-модератор
+            ], [
+                'id.required' => 'ID пользователя обязательно',
+                'id.integer' => 'ID должен быть числом',
+                'id.exists' => 'Пользователь не найден',
+
+                'fio.required' => 'ФИО обязательно',
+                'fio.string' => 'ФИО должно быть строкой',
+                'fio.max' => 'ФИО не должно превышать 255 символов',
+
+                'email.required' => 'Email обязателен',
+                'email.email' => 'Неверный формат email',
+                'email.max' => 'Email не должен превышать 255 символов',
+                'email.unique' => 'Этот email уже используется',
+
+                'phone.required' => 'Телефон обязателен',
+                'phone.string' => 'Телефон должен быть строкой',
+                'phone.digits' => 'Телефон должен состоять из 11 цифр',
+
+                'role.required' => 'Роль обязательна',
+
+            ]);
+
+            // Если есть ошибки валидации
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Ошибки валидации',
+                    'errors' => $validator->errors()->toArray()
+                ], 422);
+            }
+
+            // Находим пользователя
+            $user = Users::find($request->id);
+
+            if (!$user) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Пользователь не найден'
+                ], 404);
+            }
+
+            // нельзя редактировать администраторов, если ты не админ
+            $currentUser = Auth::user();
+            if ($currentUser->role != 2 && $user->role == 2) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Недостаточно прав для редактирования администратора'
+                ], 403);
+            }
+
+            // Обновляем данные
+            $user->update([
+                'fio' => $request->fio,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'role' => $request->role,
+            ]);
+
+            // Успешный ответ
+            return response()->json([
+                'success' => true,
+                'message' => 'Данные пользователя успешно обновлены',
+                'user' => $user,
+                'redirect' => session('success', 'Изменения сохранены')
+            ]);
+
+        } catch (\Exception $e) {
+            // Логируем ошибку
+          /*  \Log::error('Ошибка обновления пользователя: ' . $e->getMessage(), [
+                'request' => $request->all(),
+                'user_id' => $request->id,
+                'auth_user' => Auth::id()
+            ]);*/
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Внутренняя ошибка сервера',
+                'error' => config('app.debug') ? $e->getMessage() : null
+            ], 500);
+        }
     }
     public function crudBooks(Request $request) {
         return view('homeUser');

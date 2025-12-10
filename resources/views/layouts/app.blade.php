@@ -52,7 +52,7 @@
                     </div>
                     <div class="user-details">
                         <div class="user-name">{{ auth()->user()->fio ?? 'Гость' }}</div>
-                        <div class="user-role">Администратор</div>
+                        <div class="user-role">{{ getRoleName(auth()->user()->role)}}</div>
                     </div>
                 </div>
 

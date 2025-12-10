@@ -19,7 +19,7 @@ class Users extends Authenticatable
         'data_reg' => 'datetime',
     ];
     protected $fillable = [
-        'fio', 'phone', 'email', 'password', 'data_reg'
+        'fio', 'phone', 'email', 'password', 'data_reg', 'role'
     ];
     protected $hidden = ['password', 'remember_token'];
     public function getInitialsAttribute()
@@ -40,5 +40,14 @@ class Users extends Authenticatable
         }
 
         return mb_strtoupper($initials);
+    }
+    public function getRoleName(): string
+    {
+        return match((int) $this->role) {
+            1 => 'Администратор',
+            2 => 'Модератор',
+            3 => 'Пользователь',
+            default => 'Неизвестная роль',
+        };
     }
 }
