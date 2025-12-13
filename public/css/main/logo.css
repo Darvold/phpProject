@@ -1,0 +1,271 @@
+.logo-new {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    font-family: 'Segoe UI', 'Consolas', monospace;
+    padding: 20px;
+    background: linear-gradient(145deg, #1a1a2e, #16213e);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+.tech-stack,
+.frontend-stack,
+.database-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.div-style {
+    display: flex;
+    gap: 20px;
+}
+.tech-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.tech-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    transition: left 0.7s ease;
+}
+
+.tech-item:hover::before {
+    left: 100%;
+}
+
+.tech-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+}
+
+.tech-symbol {
+    font-size: 18px;
+    opacity: 0.8;
+    font-weight: bold;
+}
+
+.tech-icon {
+    font-size: 18px;
+}
+
+.tech-name {
+    font-size: 18px;
+    letter-spacing: 0.5px;
+}
+
+/* PHP - фиолетово-синий */
+.tech-item.php {
+    background: linear-gradient(135deg, rgba(136, 146, 191, 0.2), rgba(79, 91, 147, 0.3));
+    border: 1px solid #4F5B93;
+    color: #8892BF;
+}
+
+.tech-item.php .tech-symbol {
+    color: #a5b0e6;
+}
+
+/* Laravel - красный */
+.tech-item.laravel {
+    background: linear-gradient(135deg, rgba(255, 45, 32, 0.2), rgba(183, 28, 28, 0.3));
+    border: 1px solid #FF2D20;
+    color: #FF6B6B;
+}
+
+.tech-item.laravel .tech-icon {
+    color: #FF2D20;
+    animation: pulse 2s infinite;
+}
+
+/* Vue - анимированный градиент */
+.tech-item.vue {
+    background: rgba(66, 184, 131, 0.1);
+    border: 1px solid rgba(66, 184, 131, 0.5);
+}
+
+.vue-text {
+    font-size: 20px;
+    font-weight: bold;
+    background: linear-gradient(45deg, #42b883, #35495e, #42b883, #3498db);
+    background-size: 300% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradient-flow 4s ease infinite;
+    text-shadow: 0 0 15px rgba(66, 184, 131, 0.3);
+}
+
+/* HTML/CSS - оранжевый/синий */
+.tech-item.html-css {
+    background: linear-gradient(135deg,
+    rgba(227, 79, 38, 0.15),
+    rgba(21, 114, 182, 0.15));
+    border: 1px solid rgba(227, 79, 38, 0.5);
+    padding: 10px 20px;
+}
+
+.html-text {
+    color: #E34F26;
+    font-weight: bold;
+}
+
+.css-text {
+    color: #1572B6;
+    font-weight: bold;
+}
+
+.slash {
+    margin: 0 5px;
+    color: #95a5a6;
+    font-weight: bold;
+}
+
+/* Blade - красный */
+.tech-item.blade {
+    background: linear-gradient(135deg, rgba(245, 82, 71, 0.2), rgba(255, 45, 32, 0.3));
+    border: 1px solid #F55247;
+    color: #F55247;
+}
+
+/* JS - желтый */
+.tech-item.js {
+    background: linear-gradient(135deg, rgba(247, 223, 30, 0.2), rgba(240, 219, 79, 0.3));
+    border: 1px solid #F7DF1E;
+    color: #F7DF1E;
+}
+
+/* SQL - синий */
+.tech-item.sql {
+    background: linear-gradient(135deg, rgba(68, 121, 161, 0.2), rgba(0, 94, 131, 0.3));
+    border: 1px solid #4479A1;
+    color: #5dade2;
+}
+
+.tech-divider,
+.tech-operator {
+    color: #3498db;
+    font-size: 20px;
+    font-weight: bold;
+    animation: glow 2s ease-in-out infinite alternate;
+    text-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+}
+
+.database-section {
+    
+}
+
+.db-icon {
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+.project-title {
+    width: 300px;
+    margin-top: 5px;
+    text-align: center;
+    padding: 10px;
+    background: linear-gradient(135deg, rgba(44, 62, 80, 0.3), rgba(52, 73, 94, 0.4));
+    border-radius: 12px;
+    border: 1px solid rgba(52, 152, 219, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.project-title::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #3498db, transparent);
+}
+
+.title-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 8px;
+}
+
+.title-symbol {
+    color: #3498db;
+    font-size: 24px;
+    animation: spin 3s linear infinite;
+}
+
+.title-main {
+    font-size: 32px;
+    font-weight: 800;
+    background: linear-gradient(45deg, #3498db, #2ecc71, #9b59b6);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradient-shift 3s ease infinite;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.title-sub {
+    color: #bdc3c7;
+    font-size: 16px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    position: relative;
+    padding-top: 8px;
+}
+
+.title-sub::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #2ecc71, transparent);
+}
+
+/* Анимации */
+@keyframes gradient-flow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes gradient-shift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+@keyframes glow {
+    from { opacity: 0.7; }
+    to { opacity: 1; }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

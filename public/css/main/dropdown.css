@@ -1,0 +1,103 @@
+.container {
+    position: absolute;
+    top: -14px;
+    left: 20%;
+    max-width: 900px;
+    margin: 0 auto;
+    z-index: 999;
+}
+
+/* Стили для язычка/стрелки */
+.dropdown-trigger {
+    position: relative;
+    width: 100px;
+    height: 40px;
+    margin: 20px 0;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.dropdown-trigger:hover {
+    transform: translateY(-2px);
+}
+
+.arrow {
+    width: 0;
+    height: 0;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-top: 25px solid #42b883;
+    filter: drop-shadow(0 3px 5px rgba(66, 184, 131, 0.4));
+    transition: all 0.3s ease;
+    z-index: 999;
+}
+
+.dropdown-trigger.active .arrow {
+    border-top-color: #35495e;
+    transform: rotate(180deg);
+}
+
+.arrow-label {
+    transform: translateX(-50%);
+    color: #42b883;
+    font-size: 14px;
+    font-weight: bold;
+    white-space: nowrap;
+    opacity: 0.9;
+}
+
+/* Стили для раскрывающегося блока */
+.dropdown-content {
+    position: absolute;
+    left: -140px;
+    top: 115px;
+    min-height: 250px;
+    max-height: 100%;
+    z-index: 999;
+    max-height: 0;
+    overflow: hidden;
+    background: rgba(30, 35, 50, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    border: 1px solid rgba(66, 184, 131, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    margin-top: 10px;
+    padding: 0 20px;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+}
+
+.dropdown-content.active {
+    max-height: 800px;
+    min-width: 1400px;
+    opacity: 1;
+    padding: 25px 20px;
+    margin-top: 15px;
+}
+
+/* Содержимое блока */
+.content-header-trigger {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid rgba(66, 184, 131, 0.3);
+}
+
+.title {
+    font-size: 22px;
+    font-weight: bold;
+    background: linear-gradient(45deg, #42b883, #35495e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.statusPanel {
+    background: rgba(66, 184, 131, 0.2);
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+    border: 1px solid rgba(66, 184, 131, 0.5);
+}

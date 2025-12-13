@@ -173,9 +173,7 @@ const resetSearch = async () => {
     try {
         // Загружаем ТЕКУЩУЮ страницу (не первую), но без поиска
         const url = `${paginationSearchUrl.value}?page=${currentPageBeforeReset}&per_page=${perPage.value}`;
-        if (searchQuery.value) { // ← Проверьте, что используете правильное имя
-            url += `&search=${encodeURIComponent(searchQuery.value)}`;
-        }
+
         console.log(`📥 Возвращаюсь к странице ${currentPageBeforeReset} без поиска:`, url);
 
         const response = await fetch(url, {

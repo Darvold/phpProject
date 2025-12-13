@@ -6,6 +6,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{--@yield('title')--}}phpProject</title>
     <link rel="stylesheet" href="{{asset('css/main/msg.css')}}">
+    <link rel="stylesheet" href="{{asset('css/main/dropdown.css')}}">
+    <link rel="stylesheet" href="{{asset('css/main/logo.css')}}">
     @php
     $profileStyles = [
         'authUsers' => 'auth/',
@@ -27,6 +29,81 @@
     <script src="{{ asset('js/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('js/NumberMask/imask.js') }}"></script>
     @include('template.msg')
+     <div class="container">
+        <!-- Язычок/стрелка -->
+        <div class="dropdown-trigger" id="dropdownTrigger">
+            <div class="arrow"></div>
+            <div class="arrow-label">Меню управления</div>
+        </div>
+
+        <!-- Раскрывающийся блок -->
+        <div class="dropdown-content" id="dropdownContent">
+            <div class="content-header-trigger">
+                <h2 class="title">Панель управления</h2>
+                <div class="statusPanel">Активен</div>
+            </div>
+<div class="head-left">
+                <div class="logo-new">
+                    <div class="div-style">
+                        <div class="tech-stack">
+                            <span class="tech-item php">
+                                <span class="tech-symbol">&lt;?&gt;</span>
+                                <span class="tech-name">php</span>
+                            </span>
+                            <span class="tech-divider">→</span>
+                            <span class="tech-item laravel">
+                                <span class="tech-icon">⚡</span>
+                                <span class="tech-name">Laravel</span>
+                            </span>
+                            <span class="tech-divider">+</span>
+                            <span class="tech-item vue">
+                                <span class="tech-icon">▲</span>
+                                <span class="tech-name vue-text">Vue</span>
+                            </span>
+                        </div>
+                        
+                        <div class="frontend-stack">
+                            <span class="tech-item html-css">
+                                <span class="tech-symbol">&lt;/&gt;</span>
+                                <span class="tech-names">
+                                    <span class="html-text">HTML</span>
+                                    <span class="slash">/</span>
+                                    <span class="css-text">CSS</span>
+                                </span>
+                            </span>
+                            <span class="tech-operator">&&</span>
+                            <span class="tech-item blade">
+                                <span class="tech-symbol">@{{ }}</span>
+                                <span class="tech-name">Blade</span>
+                            </span>
+                            <span class="tech-operator">+</span>
+                            <span class="tech-item js">
+                                <span class="tech-symbol">{ }</span>
+                                <span class="tech-name">JS</span>
+                            </span>
+                        </div>
+                        <div class="database-section">
+                            <span class="tech-item sql">
+                                <span class="db-icon">🗄️</span>
+                                <span class="tech-symbol">SELECT</span>
+                                <span class="tech-name">SQL</span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="project-title">
+                        <div class="title-text">
+                            <span class="title-symbol">⚡</span>
+                            <span class="title-main">FullStack</span>
+                            <span class="title-symbol">⚡</span>
+                        </div>
+                        <div class="title-sub">Панель управления</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
     <div class="allBody">
         @if(Route::currentRouteName() !== 'login.index' && Route::currentRouteName() !== 'regist.index')
         <div class="head">
@@ -35,6 +112,7 @@
                     <span class="logo-text">
                         <span class="logo-php">php</span>
                         <span class="logo-project">Project</span>
+                        <span class="logo-vue">Vue</span>
                     </span>
                     <div class="logo-subtitle">Панель управления</div>
                 </div>
@@ -115,6 +193,40 @@
                 }, 6000); // 3 секунды
                 });
             }, 0);
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const trigger = document.getElementById('dropdownTrigger');
+            const content = document.getElementById('dropdownContent');
+            
+            trigger.addEventListener('click', function() {
+                trigger.classList.toggle('active');
+                content.classList.toggle('active');
+                
+                // Анимация для карточек при открытии
+                if (content.classList.contains('active')) {
+                    const cards = document.querySelectorAll('.info-card');
+                    cards.forEach(card => {
+                        card.style.opacity = '0';
+                        card.style.transform = 'translateY(-10px)';
+                        
+                        setTimeout(() => {
+                            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                            card.style.opacity = '1';
+                            card.style.transform = 'translateY(0)';
+                        }, 100);
+                    });
+                }
+            });
+            
+            // Закрытие по клику вне области
+            document.addEventListener('click', function(event) {
+                if (!trigger.contains(event.target) && !content.contains(event.target)) {
+                    trigger.classList.remove('active');
+                    content.classList.remove('active');
+                }
+            });
         });
     </script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
