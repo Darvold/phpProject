@@ -39,7 +39,7 @@
         <!-- Раскрывающийся блок -->
         <div class="dropdown-content" id="dropdownContent">
             <div class="content-header-trigger">
-                <h2 class="title">Панель управления</h2>
+                <h2 class="title">Панель управления (В разработке)</h2>
                 <div class="statusPanel">Активен</div>
             </div>
 <div class="head-left">
