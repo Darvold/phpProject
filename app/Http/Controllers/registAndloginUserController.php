@@ -44,7 +44,7 @@ class registAndloginUserController extends Controller
                 'fio' => 'required|string|max:255',
                 'phone' => ['required', 'integer', 'regex:/^7[0-9]{10}$/'],
                 'email' => 'required|email|max:255',
-                'password' => 'required|max:255',
+                'password' => 'required|string|max:255',
                 'password_confirmation' => 'required|max:255',
             ]);
             //'phone' => ['required', 'regex:/^(\+7|8)[0-9]{10}$/'], Ожидаемый формат с префиксом +7 или 8

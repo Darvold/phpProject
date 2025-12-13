@@ -7,15 +7,15 @@
                     <path
                         d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
                 </svg>
-                Данные пользователя
+                Создать пользователя
             </h3>
             <div class="form-actions">
-                <button class="btn-save" @click="saveUser">Сохранить</button>
+                <button class="btn-save create" @click="createUser">Создать</button>
                 <button class="btn-cancel" @click="cancelUser">Отменить</button>
             </div>
         </div>
 
-        <form class="user-form" @submit.prevent="saveUser">
+        <form class="user-form" @submit.prevent="createUser">
             <div class="form-group">
                 <label class="form-label">
                     <svg class="label-icon" xmlns="http://www.w3.org/2000/svg" width="12"
@@ -53,7 +53,17 @@
                 </label>
                 <input type="tel" data-mask="phone" maxlength="16" v-model="form.phone" class="form-input" >
             </div>
-
+            <div class="form-group">
+                <label class="form-label">
+                    <svg class="label-icon" xmlns="http://www.w3.org/2000/svg" width="12"
+                         height="12" fill="currentColor" viewBox="0 0 16 16">
+                        <path
+                            d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+                    </svg>
+                    Пароль
+                </label>
+                <input type="password" class="form-input" v-model="form.password" placeholder="Новый пароль">
+            </div>
             <div class="form-group">
                 <label class="form-label">
                     <svg class="label-icon" xmlns="http://www.w3.org/2000/svg" width="12"
@@ -82,90 +92,59 @@
 </template>
 <script setup>
 import {ref, watch, onMounted, onUnmounted} from 'vue';
-import { showNotification, cancelUser, form } from '../functions/notifications.js';
+import {showNotification, cancelUser } from '../functions/notifications.js';
 import { eventBus, SEARCH_EVENTS } from '../utils/eventBus.js';
+
 const roleOptions = [
     { value: '1', label: 'Пользователь' },
     { value: '2', label: 'Администратор' },
     { value: '3', label: 'Модератор' }
 ];
+const form = ref({
+    id: null,
+    fio: '',
+    email: '',
+    phone: '',
+    password: '',
+    role: '1',
+});
 const paginationUrl = ref('');
 // Функция преобразования цифры в маску
-const digitsToMask = (digits) => {
-    if (!digits) return '';
-
-    // Убираем всё кроме цифр (на всякий случай)
-    const clean = digits.toString().replace(/\D/g, '');
-
-    // Если номер начинается с 7 или 8
-    let phoneDigits = clean;
-    if (clean.startsWith('7') || clean.startsWith('8')) {
-        phoneDigits = clean.substring(1); // убираем первую цифру
-    }
-
-    // Собираем маску
-    let result = '+7';
-    if (phoneDigits.length > 0) result += `(${phoneDigits.substring(0, 3)}`;
-    if (phoneDigits.length > 3) result += `)${phoneDigits.substring(3, 6)}`;
-    if (phoneDigits.length > 6) result += `-${phoneDigits.substring(6, 8)}`;
-    if (phoneDigits.length > 8) result += `-${phoneDigits.substring(8, 10)}`;
-
-    return result;
-};
 // 1. Слушаем событие из другого компонента
 onMounted(() => {
-    window.addEventListener('user-edit-start', handleEditStart);
-
-    // 2. Проверяем, может данные уже есть
-    if (window.editingUserData) {
-        fillForm(window.editingUserData);
-    }
-    const container = document.getElementById('updateUserData');
+    const container = document.getElementById('createUser');
     if (container) {
-            paginationUrl.value = container.dataset.paginationUrl;
-
+        paginationUrl.value = container.dataset.paginationUrl;
     }
+    /*eventBus.on(SEARCH_EVENTS.USERS_UPDATED, (data) => {
+        console.log('Пользователи обновлены:', data.users.length);
+        // Делаем что-то с обновленными данными
+    });*/
 });
 onUnmounted(() => {
-    window.removeEventListener('user-edit-start', handleEditStart);
+   /* eventBus.off(SEARCH_EVENTS.USERS_UPDATED);*/
 });
-// Обработчик события
-const handleEditStart = (event) => {
-    console.log('Получены данные для редактирования:', event.detail);
-    fillForm(event.detail);
-};
 
-// Заполнение формы
-const fillForm = (user) => {
-    // Преобразуем цифры в маску
-    const phoneWithMask = digitsToMask(user.phone);
-    form.value = {
-        id: user.id,
-        fio: user.fio || '',
-        email: user.email || '',
-        phone: phoneWithMask,
-        role: user.role?.toString() || '1',
-    };
-};
 // Сохранение изменений
-const saveUser = async () => {
+const createUser = async () => {
     try {
         // Находим кнопку
-        const saveButton = document.querySelector('.btn-save');
+        const createButton = document.querySelector('.btn-save.create');
 
-        if (!saveButton) {
-            console.error('Кнопка сохранения не найдена');
+        if (!createButton) {
+            console.error('Кнопка создания не найдена');
             return;
         }
 
         // Блокируем кнопку сразу
-        saveButton.disabled = true;
-        saveButton.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Сохранение...';
-        if (document.querySelector('#updateUserData').getAttribute('data-status') !== 'true') {
-            showNotification('info', 'Выберите пользователя для редактирования');
+    createButton.disabled = true;
+    createButton.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Создание...';
+
+        if (document.querySelector('#createUser').getAttribute('data-status') !== 'true') {
+            showNotification('info', 'Выберите пользователя для создания');
             // Разблокируем кнопку если форма не активна
-            saveButton.disabled = false;
-            saveButton.innerHTML = 'Создать';
+            createButton.disabled = false;
+            createButton.innerHTML = 'Создать';
             return;
         }
 
@@ -178,7 +157,8 @@ const saveUser = async () => {
             console.log('Телефон очищен:', form.value.phone, '→', dataToSend.phone);
         }
 
-        console.log('Сохранение пользователя:', dataToSend);
+        console.log('Создание пользователя:', dataToSend);
+
         // Отправка на сервер
         const response = await fetch(paginationUrl.value, {
             method: 'POST',
@@ -200,7 +180,8 @@ const saveUser = async () => {
 
             // 1. Показываем уведомление
             showNotification('success', result.message);
-
+            // 2. Оповещаем таблицу об обновлении через eventBus
+            eventBus.emit(SEARCH_EVENTS.RESET_SEARCH);
             // 2. Оповещаем таблицу об обновлении
             const event = new CustomEvent('user-updated', { detail: result.user });
             window.dispatchEvent(event);
@@ -210,17 +191,16 @@ const saveUser = async () => {
 
 
             // 5. Разблокируем кнопку через 3 секунды
-            saveButton.disabled = false;
-            saveButton.innerHTML = 'Сохранить';
-// 2. Оповещаем таблицу об обновлении через eventBus
-            eventBus.emit(SEARCH_EVENTS.RESET_SEARCH);
+            createButton.disabled = false;
+            createButton.innerHTML = 'Создать';
+
         } else {
             // Ошибка
             console.error('Ошибка от сервера:', result);
 
             // Разблокируем кнопку при ошибке
-            saveButton.disabled = false;
-            saveButton.innerHTML = 'Сохранить';
+            createButton.disabled = false;
+            createButton.innerHTML = 'Создать';
 
             if (result.errors) {
                 // Ошибки валидации
@@ -236,10 +216,10 @@ const saveUser = async () => {
         showNotification('error', 'Ошибка соединения с сервером');
 
         // Разблокируем кнопку при ошибке сети
-        const saveButton = document.querySelector('.btn-save');
-        if (saveButton) {
-            saveButton.disabled = false;
-            saveButton.innerHTML = 'Сохранить';
+        const createButton = document.querySelector('.btn-save.create');
+        if (createButton) {
+            createButton.disabled = false;
+            createButton.innerHTML = 'Создать';
         }
     }
 };

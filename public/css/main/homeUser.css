@@ -152,6 +152,7 @@
 }
 
 .form-card {
+    width: 470px;
     background: rgba(26, 32, 44, 0.8);
     border-radius: 16px;
     padding: 30px;

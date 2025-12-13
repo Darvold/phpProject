@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\AjaxOnly;
 use App\Http\Middleware\CheckUserAccess;
 use App\Models\Session;
 use App\Models\Users;
@@ -15,7 +16,10 @@ Route::get('/cc', function () {
     /*Artisan::call('optimize');*/
     return 'Cache cleared successfully.';
 });
-
+Route::get('/reset', function () {
+    Users::onlyTrashed()->restore();
+    return 'Пользователи восстановлены';
+});
 Route::get('/', [ControllersNamespace\RegistAndLoginUserController::class, 'loginUser'])->name('login.index');
 Route::post('/', [ControllersNamespace\RegistAndLoginUserController::class, 'loginUserPost'])->name('login.store');
 Route::get('/registr', [ControllersNamespace\RegistAndLoginUserController::class, 'registrationUser'])->name('regist.index');
@@ -31,28 +35,51 @@ Route::middleware([CheckUserAccess::class])->group(function () {
     Route::get('/CRUD/books', [ControllersNamespace\HomeUserController::class, 'crudBooks'])->name('crudBooks.index');
 
 // 2. Маршрут для AJAX/JSON запросов
-    Route::get('/api/CRUD/users', function (Request $request) {
-        $page = $request->get('page', 1);
-        //Количество пользователей поиск
-        $perPage = $request->get('per_page', 6);
+    Route::middleware([AjaxOnly::class])->group(function () {
+        Route::get('/api/CRUD/users', function (Request $request) {
+            $page = $request->get('page', 1);
+            //Количество пользователей поиск
+            $perPage = $request->get('per_page', 6);
 
-        $users = Users::paginate($perPage, ['*'], 'page', $page);
-        $activeUserIds = Session::getActiveUserIds();
+            $users = Users::paginate($perPage, ['*'], 'page', $page);
+            $activeUserIds = Session::getActiveUserIds();
 
-        $users->getCollection()->transform(function ($user) use ($activeUserIds) {
-            $user->is_active = in_array($user->id, $activeUserIds);
-            return $user;
-        });
+            $users->getCollection()->transform(function ($user) use ($activeUserIds) {
+                $user->is_active = in_array($user->id, $activeUserIds);
+                return $user;
+            });
 
-        return response()->json([
-            'users' => $users->items(),
-            'current_page' => $users->currentPage(),
-            'total_pages' => $users->lastPage(),
-            'total_items' => $users->total(),
-            'per_page' => $users->perPage()
-        ]);
-    })->name('users.api.get');
-    Route::post('/api/CRUD/users/update', [ControllersNamespace\HomeUserController::class, 'updateUserData'])->name('userUpdate.api.get');
+            return response()->json([
+                'users' => $users->items(),
+                'current_page' => $users->currentPage(),
+                'total_pages' => $users->lastPage(),
+                'total_items' => $users->total(),
+                'per_page' => $users->perPage()
+            ]);
+        })->name('users.api.get');
+        Route::post('/api/CRUD/users/update', [ControllersNamespace\HomeUserController::class, 'updateUserData'])->name('userUpdate.api.post');
+        Route::post('/api/CRUD/users/create', [ControllersNamespace\HomeUserController::class, 'createUserData'])->name('userCreate.api.post');
+        Route::post('/api/CRUD/users/delete', [ControllersNamespace\HomeUserController::class, 'deleteUserData'])->name('userDelete.api.post');
+        /*Route::match(['get', 'put', 'patch', 'delete'], '/api/CRUD/users/update', function () {
+            return redirect()->back();
+        })->withoutMiddleware([AjaxOnly::class]);*/
+        Route::any('/api/CRUD/users/{action}', function ($action) {
+            // Разрешенные действия и их методы
+            $allowedActions = [
+                'update' => ['POST'],
+                'create' => ['POST'],
+                'delete' => ['POST']
+            ];
+
+            if (array_key_exists($action, $allowedActions)) {
+                return redirect()->back()
+                    ->with('error', 'Для действия "' . $action . '" используйте методы: ' . implode(', ', $allowedActions[$action]));
+            }
+
+            // Если действие не найдено, вернуть 404
+            abort(404);
+        })->where('action', 'update|create');
+    });
 
     //Выход из профиля
     Route::post('/logout', [ControllersNamespace\UserController::class, 'logout'])->name('logoutUser.store');

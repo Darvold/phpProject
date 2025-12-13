@@ -46,6 +46,7 @@
 
 /* Левая колонка - Форма */
 .user-form-section {
+    width: 100%;
     border-right: 1px solid rgba(255, 255, 255, 0.1);
     padding: 30px;
     background: rgba(26, 32, 44, 0.8);
@@ -68,6 +69,7 @@
 }
 
 .form-title {
+    width: 200px;
     font-size: 18px;
     font-weight: 600;
     color: #e2e8f0;
@@ -209,7 +211,6 @@ option {
     font-size: 20px;
     font-weight: 600;
     color: #e2e8f0;
-    margin: 0;
 }
 
 .list-actions {
@@ -477,4 +478,43 @@ option {
 
 .total-users strong {
     color: #e2e8f0;
+}
+
+/* Flip анимация */
+.flip-container {
+    perspective: 1000px;
+    position: relative;
+}
+
+.form-view {
+    position: absolute;
+    backface-visibility: hidden;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+#createUser {
+    transform: rotateY(0deg);
+}
+
+#updateUserData {
+    transform: rotateY(180deg);
+}
+
+/* Когда показываем update */
+.show-update #createUser {
+    transform: rotateY(-180deg);
+}
+
+.show-update #updateUserData {
+    transform: rotateY(0deg);
+}
+
+/* Когда показываем create */
+.show-create #createUser {
+    transform: rotateY(0deg);
+}
+
+.show-create #updateUserData {
+    transform: rotateY(180deg);
 }

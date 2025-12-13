@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Users;
 use App\Models\Session;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -130,7 +131,13 @@ class HomeUserController extends Controller
                     'email',
                     'max:255',
                 ],
-                'phone' => 'required|integer|digits:11',
+                'phone' => [
+                    'required',
+                    'string',
+                    'max:11',
+                    'regex:/^[0-9]+$/', // только цифры
+                    'unique:users,phone,' . $request->id // исключаем текущего пользователя
+                ],
                 'role' => 'required|integer|in:1,2,3', // 1-пользователь, 2-админ, 3-модератор
             ], [
                 'id.required' => 'ID пользователя обязательно',
@@ -149,6 +156,7 @@ class HomeUserController extends Controller
                 'phone.required' => 'Телефон обязателен',
                 'phone.string' => 'Телефон должен быть строкой',
                 'phone.digits' => 'Телефон должен состоять из 11 цифр',
+                'phone.unique' => 'Этот номер телефона уже зарегистрирован',
 
                 'role.required' => 'Роль обязательна',
 
@@ -204,6 +212,193 @@ class HomeUserController extends Controller
                 'request' => $request->all(),
                 'user_id' => $request->id,
                 'auth_user' => Auth::id()
+            ]);*/
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Внутренняя ошибка сервера',
+                'error' => config('app.debug') ? $e->getMessage() : null
+            ], 500);
+        }
+    }
+    public function createUserData(Request $request)
+    {
+        try {
+            // Валидация данных
+            $validator = Validator::make($request->all(), [
+                'fio' => ['required',
+                    'string',
+                    'max:255',
+                    function ($attribute, $value, $fail) {
+                        if (preg_match('/[0-9!@#$%^&*()_+|~=`{}\[\]:";\'<>?,.\/]/', $value)) {
+                            $fail('error', 'ФИО не должно содержать цифры и специальные символы!');
+                        }
+                    }
+                ],
+                'email' => [
+                    'required',
+                    'email',
+                    'max:255',
+                    'unique:users,email,' . $request->id
+                ],
+                'phone' => [
+                    'required',
+                    'string',
+                    'max:11',
+                    'regex:/^[0-9]+$/', // только цифры
+                    'unique:users,phone,' . $request->id // исключаем текущего пользователя
+                ],
+                'password' => 'required|string|max:255',
+                'role' => 'required|integer|in:1,2,3', // 1-пользователь, 2-админ, 3-модератор
+            ], [
+                'id.required' => 'ID пользователя обязательно',
+                'id.integer' => 'ID должен быть числом',
+                'id.exists' => 'Пользователь не найден',
+
+                'fio.required' => 'ФИО обязательно',
+                'fio.string' => 'ФИО должно быть строкой',
+                'fio.max' => 'ФИО не должно превышать 255 символов',
+
+                'email.required' => 'Email обязателен',
+                'email.email' => 'Неверный формат email',
+                'email.max' => 'Email не должен превышать 255 символов',
+                'email.unique' => 'Этот email уже используется',
+
+                'phone.required' => 'Телефон обязателен',
+                'phone.string' => 'Телефон должен быть строкой',
+                'phone.digits' => 'Телефон должен состоять из 11 цифр',
+                'phone.unique' => 'Этот номер телефона уже зарегистрирован',
+
+                'role.required' => 'Роль обязательна',
+
+            ]);
+
+            // Если есть ошибки валидации
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Ошибки валидации',
+                    'errors' => $validator->errors()->toArray()
+                ], 422);
+            }
+
+            // Находим пользователя
+            $user = Users::find($request->phone);
+
+            if ($user) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Телефон уже используется'
+                ], 404);
+            }
+
+            // нельзя редактировать администраторов, если ты не админ
+            $currentUser = Auth::user();
+            if ($currentUser->role != 2) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Недостаточно прав для создания пользователя'
+                ], 403);
+            }
+
+            // Обновляем данные
+            Users::create([
+                'fio' => $request->fio,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'password' => bcrypt($request->password),
+                'data_reg' => Carbon::now(),
+                'role' => $request->role,
+            ]);
+
+            // Успешный ответ
+            return response()->json([
+                'success' => true,
+                'message' => 'Данные пользователя успешно созданы',
+                'user' => $user,
+                'redirect' => session('success', 'Пользователь создан')
+            ]);
+
+        } catch (\Exception $e) {
+            // Логируем ошибку
+          /*  \Log::error('Ошибка обновления пользователя: ' . $e->getMessage(), [
+                'request' => $request->all(),
+                'user_id' => $request->id,
+                'auth_user' => Auth::id()
+            ]);*/
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Внутренняя ошибка сервера',
+                'error' => config('app.debug') ? $e->getMessage() : null
+            ], 500);
+        }
+    }
+    public function deleteUserData(Request $request) {
+        try {
+            // Валидация данных
+            $validator = Validator::make($request->all(), [
+                'id' => 'required|integer',
+            ], [
+                'id.required' => 'ID пользователя обязательно',
+                'id.integer' => 'ID должен быть числом',
+            ]);
+
+            // Если есть ошибки валидации
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Ошибка валидации',
+                    'errors' => $validator->errors()->toArray()
+                ], 422);
+            }
+
+            // Находим пользователя для удаления
+            $userToDelete = Users::where('id', $request->id)->first();
+
+            if (!$userToDelete) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Пользователь не был найден'
+                ], 404);
+            }
+
+            // Проверка прав: нельзя удалять администраторов, если ты не админ
+            $currentUser = Auth::user();
+
+            // Если пользователь, которого удаляют - админ (role = 2)
+            if ($userToDelete->role == 2 && $currentUser->role != 2) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Недостаточно прав для удаления администратора'
+                ], 403);
+            }
+
+            // Нельзя удалять самого себя
+            if ($userToDelete->id == $currentUser->id) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Нельзя удалить самого себя'
+                ], 403);
+            }
+
+            // Удаляем пользователя
+            $userToDelete->delete();
+
+            // Успешный ответ
+            return response()->json([
+                'success' => true,
+                'message' => 'Пользователь был удалён',
+                'user' => [
+                    'id' => $userToDelete->id,
+                    'fio' => $userToDelete->fio
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            /*\Log::error('Delete user error:', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
             ]);*/
 
             return response()->json([

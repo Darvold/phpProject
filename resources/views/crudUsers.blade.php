@@ -28,26 +28,18 @@
             <h1 class="page-title">Управление пользователями</h1>
             <p class="page-subtitle">Список всех зарегистрированных пользователей системы</p>
         </div>
-<!--        <div class="form-group">
-            <label class="form-label">
-                <svg class="label-icon" xmlns="http://www.w3.org/2000/svg" width="12"
-                     height="12" fill="currentColor" viewBox="0 0 16 16">
-                    <path
-                        d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
-                </svg>
-                Пароль
-            </label>
-            <input type="password" class="form-input" placeholder="Новый пароль">
-        </div>-->
         <div class="content-main">
             <div class="main-container">
                 <!-- Блок с формой и списком пользователей -->
                 <div class="content-grid">
                     <!-- Левая колонка -->
-                    <div class="user-form-section">
+                    <div class="user-form-section flip-container show-create">
                         {{-- Левая колонка создать/обновить данные пользователя --}}
-                        <div id="updateUserData"
-                             data-pagination-url="{{ route('userUpdate.api.get') }}">
+                        <div id="updateUserData" class="form-view" data-status="false"
+                             data-pagination-url="{{ route('userUpdate.api.post') }}">
+                        </div>
+                        <div id="createUser" class="form-view" data-status="true"
+                             data-pagination-url="{{ route('userCreate.api.post') }}">
                         </div>
                         {{-- Конец левой колонки создать/обновить данные пользователя --}}
                     </div>
@@ -55,13 +47,14 @@
                     <!-- Правая колонка: Список пользователей -->
                     <div id="userList"
                          data-users='@json($users)'
-                         data-my-id="{{Auth::id()}}"
+                         data-id="{{Auth::id()}}"
                          data-current-page="{{ $currentPage }}"
                          data-total-pages="{{ $totalPages }}"
                          data-total-items="{{ $totalItems }}"
                          data-per-page="{{ $perPage }}"
-                         data-pagination-url="{{ route('users.api.get') }}">
-                         data-paginationSearch-url="{{ route('crudUsers.index') }}">
+                         data-pagination-url="{{ route('users.api.get') }}"
+                         data-pagination-search-url="{{ route('crudUsers.index') }}"
+                         data-pagination-delete-url="{{ route('userDelete.api.post') }}"
                         @if(isset($searchQuery))
                             data-search-query="{{ $searchQuery }}"
                         @endif>
@@ -73,11 +66,15 @@
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const inputElement = document.querySelector('[data-mask="phone"]')
-            const maskOptions = { // создаем объект параметров
-                mask: '+{7}(000)000-00-00' // задаем единственный параметр mask
-            }
-            IMask(inputElement, maskOptions) // запускаем плагин с переданными параметрами
-        })
+            // Находим все элементы с data-mask="phone"
+            const phoneInputs = document.querySelectorAll('[data-mask="phone"]');
+            const maskOptions = {
+                mask: '+{7}(000)000-00-00'
+            };
+            // Применяем маску к каждому элементу
+            phoneInputs.forEach(input => {
+                IMask(input, maskOptions);
+            });
+        });
     </script>
 @endsection

@@ -1,14 +1,8 @@
 import './bootstrap';
 import { createApp } from 'vue';
-import ExampleComponent from './components/ExampleComponent.vue';
-import auth from './App.vue';
-import Registr from './components/registr.vue';
 import UpdateUserData from './components/updateUserData.vue';
 import userList from "./components/userList.vue";
-/*import App from './App.vue';
-import router from './router';*/
-
-/*createApp(App).use(router).mount('#app');*/
+import CreateUser from "./components/createUser.vue";
 
 
 // Список пользователей
@@ -18,3 +12,7 @@ app.mount('#userList');
 // Обновить данные пользователя
 const app1 = createApp(UpdateUserData);
 app1.mount('#updateUserData');
+
+// Создать пользователя
+const app2 = createApp(CreateUser);
+app2.mount('#createUser');
