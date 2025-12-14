@@ -6,52 +6,21 @@
 🚀 Технологический стек
 Backend
 Laravel 12 - PHP фреймворк
-
 Eloquent ORM - для работы с базой данных
-
 Middleware - кастомные посредники для контроля доступа
-
 REST API - JSON API для клиентской части
-
 Session-based Authentication - аутентификация через сессии
 
 Frontend
 Vue.js 3 - прогрессивный JavaScript фреймворк
-
 Vue Router - для маршрутизации на клиенте
-
 Axios - для HTTP-запросов к API
 
 База данных
 MySQL - реляционная СУБД
-
 Пагинация - нативная пагинация Laravel
-
 Soft Deletes - мягкое удаление записей
 
-📁 Структура проекта
-text
-laravel-vue-crm/
-├── app/
-│   ├── Http/
-│   │   ├── Controllers/
-│   │   │   ├── RegistAndLoginUserController.php  # Авторизация/регистрация
-│   │   │   ├── HomeUserController.php            # Профиль пользователя
-│   │   │   └── UserController.php                # Управление пользователями
-│   │   ├── Middleware/
-│   │   │   ├── CheckUserAccess.php              # Проверка доступа
-│   │   │   └── AjaxOnly.php                     # AJAX middleware
-│   │   └── Models/
-│   │       └── Users.php                        # Модель пользователей
-├── resources/
-│   └── views/
-│       ├── layouts/
-│       └── pages/                               # Blade шаблоны
-├── routes/
-│   └── web.php                                  # Маршрутизация
-└── public/
-    └── js/
-        └── app.js                               # Vue.js приложение
         
 🔐 Система маршрутизации
 Публичные маршруты
